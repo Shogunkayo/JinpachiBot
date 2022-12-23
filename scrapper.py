@@ -10,7 +10,7 @@ soup = bs(site.content, 'html.parser')
 
 names = soup.find_all('a', class_ = 'player_name_players_table')
 chemistry = soup.find_all('span', class_ = 'players_club_nation')
-ovr_ratings = soup.find_all('span', class_ = '')
+ovr_ratings = soup.find_all('span', class_ = 'form')
 
 chemistry_cleaned = []
 names_cleaned = []
