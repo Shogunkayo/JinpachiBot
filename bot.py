@@ -24,18 +24,16 @@ def run_bot():
 
     @client.event
     async def on_message(message):
-        # Make sure bot doesn't get stuck in an infinite loop
         if message.author == client.user:
             return
 
-        # Get data about the user
         username = str(message.author)
         user_message = str(message.content)
         channel = str(message.channel)
 
         # Debug printing
         with open('logs', 'a') as file:
-            file.write((f"{username} said: '{user_message}' in ({channel})"))
+            file.write((f"{username} said: '{user_message}' in ({channel})\n"))
 
         # If the user message contains a '?' in front of the text, it becomes a private message
         if user_message[0] == '?':
