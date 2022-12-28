@@ -47,4 +47,38 @@ def search_position(position) -> str:
     return (df.loc[df['position'].str.contains(position, flags= re.IGNORECASE, regex= True)].sort_values('base_ratings', ascending=False)).to_numpy().tolist()
 
 if __name__ == '__main__':
-    print(len(search_position('st')))
+    temp = search_position('ST')
+    print(temp)
+    temp = [temp[i:i + 4] for i in range(0, len(temp), 4)]
+    for i in range(len(temp)):
+        output = ">>>\n----------------------------------------------------------\n"
+        for j in temp[i]:
+            if(len(j[0]) < 20):
+                j[0] = j[0].ljust(20)
+            else:
+                j[0] = j[0][:17] + '...'
+            
+            if(len(j[2]) < 20):
+                j[2] = j[2].ljust(20)
+            else:
+                j[2] = j[2][:17] + '...'
+            
+            if(len(j[3]) < 20):
+                j[3] = j[3].ljust(20)
+            else:
+                j[3] = j[3][:17] + '...'
+
+            if(len(j[4]) < 20):
+                j[4] = j[4].ljust(20)
+            else:
+                j[4] = j[4][:17] + '...'
+
+            if(j[7] == -1):
+                j[7] = '-1     '
+
+            output += f"| + Name:   {j[0]}  + Position: {j[1]} \t |\n| + Club:   {j[2]}  + Ovr Rating: {j[5]} \t |\n| + Nation: {j[3]}  + Base Rating: {j[6]} \t |\n| + League: {j[4]}  + Price: {j[7]} \t |\n|--------------------------------------------------------|\n"
+        temp[i] = output
+
+    for i in temp:
+        print(i,'\n\n')
+
