@@ -5,45 +5,99 @@ from discord.ui import Button, View
 
 
 # Create Message View
-
 class SearchView(View):
-    def __init__(self, request, response):
+    def __init__(self, message, response):
         super().__init__(timeout=60)
-        self.request = request
-        self.current = 0
+        self.message = message
         self.response = response
-
-    @discord.ui.button(label='<<-', custom_id='skip_start')
+        self.end = False
+        self.current = 0
+    
+    @discord.ui.button(label='<<-', custom_id='skip_start', disabled= True)
     async def skip_start_callback(self, interaction, skip_start_btn):
+        prev_btn = [i for i in self.children if i.custom_id == 'prev'][0]
+        next_btn = [i for i in self.children if i.custom_id == 'next'][0]
         skip_start_btn = [i for i in self.children if i.custom_id == 'skip_start'][0]
-        await interaction.response.send_message('heheheheh')
+        skip_end_btn = [i for i in self.children if i.custom_id == 'skip_end'][0]
 
-    @discord.ui.button(label='<-', custom_id='prev')
+        self.current = 0
+
+        if(self.current < len(self.response)-1):
+            next_btn.disabled = False
+            skip_end_btn.disabled = False
+
+        skip_start_btn.disabled = True
+        prev_btn.disabled = True
+
+        await interaction.response.edit_message(content= self.response[self.current], view=self)
+
+    @discord.ui.button(label='<-', custom_id='prev', disabled= True)
     async def prev_callback(self, interaction, prev_btn):
         prev_btn = [i for i in self.children if i.custom_id == 'prev'][0]
-        prev_btn.label = 'Turipipturip'
-        await interaction.response.send_message('!!!')
+        next_btn = [i for i in self.children if i.custom_id == 'next'][0]
+        skip_start_btn = [i for i in self.children if i.custom_id == 'skip_start'][0]
+        skip_end_btn = [i for i in self.children if i.custom_id == 'skip_end'][0]
+
+        if(self.current > 0):
+            self.current -= 1
+        
+        if(self.current == 0):
+            prev_btn.disabled = True
+            skip_start_btn.disabled = True
+
+        if(self.current < len(self.response)-1):
+            next_btn.disabled = False
+            skip_end_btn.disabled = False
+
+        
+        await interaction.response.edit_message(content= self.response[self.current], view=self)
 
     @discord.ui.button(label='->', custom_id='next')
     async def next_callback(self, interaction, next_btn):
+        prev_btn = [i for i in self.children if i.custom_id == 'prev'][0]
         next_btn = [i for i in self.children if i.custom_id == 'next'][0]
-        next_btn.label = 'HEHEHEHE'
-        next_btn.disabled = True
-        await interaction.response.edit_message(view=self)
+        skip_start_btn = [i for i in self.children if i.custom_id == 'skip_start'][0]
+        skip_end_btn = [i for i in self.children if i.custom_id == 'skip_end'][0]
+        
+        if(self.current < len(self.response)-1):
+            self.current += 1
+        
+        if(self.current == len(self.response)-1):
+            next_btn.disabled = True
+            skip_end_btn.disabled = True
+
+        if(self.current > 0):
+            prev_btn.disabled = False
+            skip_start_btn.disabled = False
+
+        await interaction.response.edit_message(content= self.response[self.current], view=self)
 
     @discord.ui.button(label='->>', custom_id='skip_end')
     async def skip_end_callback(self, interaction, skip_end_btn):
+        prev_btn = [i for i in self.children if i.custom_id == 'prev'][0]
+        next_btn = [i for i in self.children if i.custom_id == 'next'][0]
+        skip_start_btn = [i for i in self.children if i.custom_id == 'skip_start'][0]
         skip_end_btn = [i for i in self.children if i.custom_id == 'skip_end'][0]
-        await interaction.response.send_message('sdmniasodnasopndsiao')
+
+        self.current = len(self.response) - 1
+
+        if(self.current > 0):
+            prev_btn.disabled = False
+            skip_start_btn.disabled = False
+
+        next_btn.disabled = True
+        skip_end_btn.disabled = True
+
+        await interaction.response.edit_message(content= self.response[self.current], view=self)
 
     async def interaction_check(self, interaction) -> bool:
-        if interaction.user != self.request.author:
+        if interaction.user != self.message.author:
             await interaction.response.send_message('You cant use that', ephemeral=True)
             return False
         return True
 
-def create_ui_search(request, response):
-    view = SearchView(request)
+def create_ui_search(message, response):
+    view = SearchView(message, response)
     return view
 
 # Send messages
@@ -52,7 +106,10 @@ async def send_message(message, user_message, is_private):
         if(user_message[0] in ['p', 'n', 'c', 'l']):
             response = responses.handle_response_search(user_message)
             view = create_ui_search(message, response)
-            await message.author.send(response, view=view) if is_private else await message.channel.send(response, view=view)
+            if(len(response) == 0):
+                message.author.send('Nothing found') if is_private else await message.channel.send('Nothing found')
+            else:
+                await message.author.send(response[0], view=view) if is_private else await message.channel.send(response[0], view=view)
         else:
             response = responses.handle_response_misc(user_message)
             await message.author.send(response) if is_private else await message.channel.send(response)
