@@ -96,22 +96,52 @@ class SearchView(View):
             return False
         return True
 
+class HelpView(View):
+    def __init__(self, message):
+        super().__init__(timeout=60)
+        self.message = message
+
+    @discord.ui.button(label='Search', custom_id='search')
+    async def search_btn_callback(self, interaction, search_btn):
+        content = '```\nj!player {playername} -> search for a player\nj!p {playername} -> shorthand for player\nj!nation {nation} -> get a list of all players of the nation\nj!n {nation} -> shorthand for nation\nj!club {club} -> get a list of all players of the club\nj!c {club} -> shorthand for club\nj!league {league} -> get a list of all players of the league\nj!l {leauge} -> shorthand for league\nj!position {position} -> get a list of all players playing in the position\nj!pos {position} -> shorthand for position```'
+        await interaction.response.send_message(content=content)
+
+    @discord.ui.button(label='Misc', custom_id='misc')
+    async def misc_btn_callback(self, interaction, misc_btn):
+        content = '```\nj!hello -> greet the bot :) it can get lonely sometimes\nj!roll -> get a random number between 1 and 100\nj!ping -> get the latency```'
+        await interaction.response.send_message(content=content)
+
+    async def interaction_check(self, interaction) -> bool:
+        if interaction.user != self.message.author:
+            await interaction.response.send_message('You cant use that', ephemeral=True)
+            return False
+        return True
+
 def create_ui_search(message, response):
     view = SearchView(message, response)
     return view
 
+def create_ui_help(message):
+    view = HelpView(message)
+    return view
+
 # Send messages
-async def send_message(message, user_message, is_private):
+async def send_message(message, user_message, is_private, client=False):
     try:
-        if(user_message[0] in ['p', 'n', 'c', 'l']):
+        if(user_message[0] in ['p', 'n', 'c', 'l'] and user_message != 'ping'):
             response = responses.handle_response_search(user_message)
             view = create_ui_search(message, response)
             if(len(response) == 0):
                 message.author.send('Nothing found') if is_private else await message.channel.send('Nothing found')
             else:
                 await message.author.send(response[0], view=view) if is_private else await message.channel.send(response[0], view=view)
+        
+        elif(user_message[:4] == 'help' or user_message[0] == 'h' and user_message != 'hello'):
+            response = responses.handle_response_help()
+            view = create_ui_help(message)
+            await message.author.send(response, view=view) if is_private else await message.channel.send(response, view=view)
         else:
-            response = responses.handle_response_misc(user_message)
+            response = responses.handle_response_misc(user_message, client)
             await message.author.send(response) if is_private else await message.channel.send(response)
 
     except Exception as e:
@@ -147,6 +177,6 @@ def run_bot():
             await send_message(message, user_message, is_private=True)
         elif user_message[0] + user_message[1] == 'j!':
             user_message = user_message[2:]
-            await send_message(message, user_message, is_private=False)
+            await send_message(message, user_message, is_private=False, client=client)
 
     client.run(TOKEN)

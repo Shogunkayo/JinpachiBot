@@ -1,5 +1,3 @@
-import discord
-
 import random
 import analysis
 
@@ -43,18 +41,21 @@ def format_response(response):
 
     return response
 
-def handle_response_misc(message):
+def handle_response_help():
+    return '```\nJinpachiBot - Help\nIt’s Simple Really\n\n🔍 Search -> Search for players, sorted based on total base ratings\n🏳️ Misc -> Miscellaneous commands```'
+
+def handle_response_misc(message, client):
     request = message.upper()
 
     if(request == 'HELLO'):
-        return 'Hey there!'
+        return 'Hello, diamonds in the rough'
     
     if(request == 'ROLL'):
         return str(random.randint(1, 100))
 
-    if(request == 'help'):
-        return '>>> Teehee'
-    
+    if(request == 'PING'):
+        return f'Pong! {round (client.latency * 1000)}ms'
+
     return 'I have no response for this'
 
 
@@ -84,7 +85,11 @@ def handle_response_search(message):
         if(request == '0' or len(request) > 40):
             return 'Lock off'
         
-        return format_response(analysis.search_position(request)) 
+        response = analysis.search_position(request)
+        if(len(response) == 0):
+            return ['Valid positions are\n```\nattack -> LW ST CF RW\nmidfield -> LM CAM CM CDM RM\ndefence -> LB LWB CB RB RWB\nGK```']
+        
+        return format_response(response) 
 
 
     if(request[0] == 'P' or request[:6] == 'PLAYER'):
