@@ -18234,3 +18234,36 @@ Jiahui Zhang,CM,Hebei CFFC,China PR,Chinese FA Super L. (CHN 1),46,277,-1
 Ziye Zhao,RW,Hebei CFFC,China PR,Chinese FA Super L. (CHN 1),46,266,-1
 Junjie Wu,LB,Guangzhou R&F,China PR,Chinese FA Super L. (CHN 1),46,248,-1
 Kailin Barlow,CDM,Sligo Rovers,Republic of Ireland,SSE Airtricity League (IRL 1),46,286,-1
+name,position,club,nation,league,ovr_ratings,base_ratings,price
+Kevin De Bruyne,CM,Manchester City,Belgium,Premier League,93,518,1728000
+N'Golo Kanté,CDM,Chelsea,France,Premier League,91,496,990000
+Toni Kroos,CM,Real Madrid,Germany,LaLiga Santander,91,499,990000
+Jadon Sancho,CAM,Manchester Utd,England,Premier League,90,461,630000
+Jack Butland,GK,Crystal Palace,England,Premier League,89,513,612000
+João Félix,RW,Atlético de Madrid,Portugal,LaLiga Santander,89,472,535500
+Alexandre Lacazette,ST,OL,France,Ligue 1,89,487,573750
+Dimitri Payet,CAM,OM,France,Ligue 1,89,481,573750
+Fikayo Tomori,CB,Milan,England,Serie A TIM,88,442,409500
+Sandro Tonali,CDM,Milan,Italy,Serie A TIM,87,505,396000
+Kieran Trippier,RB,Newcastle Utd,England,Premier League,87,497,371250
+De Paul,CM,Atlético de Madrid,Argentina,LaLiga Santander,87,500,396000
+Giorgio Chiellini,CAM,LAFC,Italy,Major League Soccer,87,500,396000
+Ousmane Dembélé,ST,FC Barcelona,France,LaLiga Santander,87,456,346500
+Ferland Mendy,LB,Real Madrid,France,LaLiga Santander,87,498,371250
+Ryan Gravenberch,CM,FC Bayern,Netherlands,Bundesliga,87,497,371250
+Justin Kluivert,LW,Valencia CF,Netherlands,LaLiga Santander,86,463,252000
+Alexandre Pato,ST,Orlando City,Brazil,Major League Soccer,86,448,234000
+Lukas Klostermann,CB,RB Leipzig,Germany,Bundesliga,86,457,252000
+Jeremy Toljan,RB,Sassuolo,Germany,Serie A TIM,86,464,252000
+Mesut Özil,CAM,Başakşehir,Germany,Süper Lig (TUR 1),86,428,234000
+Reece Oxford,CDM,FC Augsburg,England,Bundesliga,86,485,270000
+Maxim Gullit,CM,SC Cambuur,Netherlands,Eredivisie,86,489,270000
+Jonathan Clauss,RWB,OM,France,Ligue 1,85,500,180000
+Daniele Verde,RW,La Spezia,Italy,Serie A TIM,85,452,157500
+Reinier Jesus Carvalho,CAM,Girona FC,Brazil,LaLiga Santander,85,458,157500
+Darren Randolph,GK,West Ham,Republic of Ireland,Premier League,85,488,168750
+Hernâni,RM,Rio Ave,Portugal,Liga NOS (POR 1),85,446,146250
+Ismaily,LB,LOSC,Brazil,Ligue 1,85,489,168750
+Noble Okello,CDM,Toronto FC,Canada,Major League Soccer,85,491,168750
+Tahith Chong,LM,Birmingham City,Netherlands,EFL Championship (ENG 2),84,463,127750
+Felix Passlack,RM,Dortmund,Germany,Bundesliga,74,481,4050

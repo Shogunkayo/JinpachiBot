@@ -67,7 +67,7 @@ def scrape_site():
     print("Scrapping completed")
 
 def scrape_new_version(version):
-    for i in range(1, 2):
+    for i in range(1, 3):
         print("Scrapping page ", i)
         page = scrape_page(i, version)
         for j in range(0, len(page[0])):
@@ -100,3 +100,7 @@ def run(option, version):
         for i in range(0, len(name)):
             csv_writer.writerow([name[i], position[i], club[i], nation[i], league[i], ovr_ratings[i], base_ratings[i], price[i]])
     print("Writing to csv completed")
+
+if __name__ == '__main__':
+    print('Running Scrapper')
+    #run(2, '&version=winter_wildcards')
