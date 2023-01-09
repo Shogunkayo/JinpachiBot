@@ -3,6 +3,7 @@ import requests
 from time import sleep
 from price import get_price
 import csv
+import pandas
 
 def scrape_page(page, version=''):
     url = 'https://www.futbin.com/players?page=' + str(page) + version
@@ -110,7 +111,15 @@ def run(option, version):
             csv_writer.writerow([name[i], position[i], club[i], nation[i], league[i], ovr_ratings[i], base_ratings[i], price[i]])
     print("Writing to csv completed")
 
+def clean():
+    print('Cleaning csv')
+    df = pandas.read_csv('cards')
+    df.drop_duplicates(inplace=True)
+    df.to_csv('cards')
+    print('Cleaning complete')
+
 if __name__ == '__main__':
     print('Running Scrapper')
     run(1, ' ')
+    clean()
     #run(2, '&version=winter_wildcards')
