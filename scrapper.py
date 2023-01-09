@@ -15,18 +15,19 @@ def scrape_page(page, version=''):
     ovr_ratings = soup.find_all('span', class_ = 'form')
     pos = soup.find_all('div', class_ = 'font-weight-bold')
     base = soup.find_all('span', class_ = 'badge')
+    versions = soup.findAll('td', class_ = 'mobile-hide-table-col')
 
     chemistry_cleaned = []
     names_cleaned = []
     ovr_ratings_cleaned = []
     pos_cleaned = []
 
-
     for i in range(len(names)):
         names_cleaned.append(names[i].text.strip())
         chemistry_cleaned.append((chemistry[i].findChildren('a')[0].get('data-original-title'), chemistry[i].findChildren('a')[1].get('data-original-title'), chemistry[i].findChildren('a')[2].get('data-original-title')))
         ovr_ratings_cleaned.append(int(ovr_ratings[i].text.strip()))
         pos_cleaned.append(pos[i].text.strip())
+        versions[i] = versions[i].find('div', recursive=False).get_text()
 
     for i in range(len(base)):
         base[i] = int(base[i].text.strip())
@@ -40,7 +41,7 @@ def scrape_page(page, version=''):
     nation = [i[1] for i in chemistry_cleaned]
     league = [i[2] for i in chemistry_cleaned]
 
-    return [names_cleaned, pos_cleaned, club, nation, league, ovr_ratings_cleaned, base_cleaned]
+    return [names_cleaned, pos_cleaned, club, nation, league, ovr_ratings_cleaned, base_cleaned, versions]
 
 name = []
 position = []
@@ -52,7 +53,15 @@ base_ratings = []
 price = []
 
 def scrape_site():
-    for i in range(1, 609):
+
+    url = 'https://www.futbin.com/players?'
+    headers = {'User-Agent' : 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/104.0.5112.81 Safari/537.36'}
+    site = requests.get(url, headers=headers)
+    soup = bs(site.content, 'html.parser')
+
+    pages = int(soup.find('ul', class_ = 'pagination').findAll('li')[5].get_text())
+
+    for i in range(1, pages):
         print("Scrapping page ", i)
         page = scrape_page(i)
         for j in range(0, len(page[0])):
@@ -103,4 +112,5 @@ def run(option, version):
 
 if __name__ == '__main__':
     print('Running Scrapper')
+    run(1, ' ')
     #run(2, '&version=winter_wildcards')
