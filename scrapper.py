@@ -52,6 +52,7 @@ league = []
 ovr_ratings = []
 base_ratings = []
 price = []
+versions = []
 
 def scrape_site():
 
@@ -73,6 +74,7 @@ def scrape_site():
             league.append(page[4][j])
             ovr_ratings.append(page[5][j])
             base_ratings.append(page[6][j])
+            versions.append(page[7][j])
         sleep(2)
     print("Scrapping completed")
 
@@ -88,27 +90,97 @@ def scrape_new_version(version):
             league.append(page[4][j])
             ovr_ratings.append(page[5][j])
             base_ratings.append(page[6][j])
+            versions.append(page[7][j])
         sleep(2)
     print("Scrapping completed")
 
 def run(option, version): 
     if(option == 1):
         scrape_site()
+        mode = 'w'
     elif(option == 2):
         scrape_new_version(version)
-
+        mode = 'a'
+    
     print("Calculating price")
     for i in range(0, len(ovr_ratings)):
         price.append(get_price(ovr_ratings[i], base_ratings[i]))
     print("Calculating price completed")
 
+    print("Adding optional positions")
+    for i in range(0, len(name)):
+        if(position[i] == 'CB' or position[i] == 'GK'):
+            pass
+        else:
+            if(position[i] == 'LWB'):
+                position.append('LB')
+            elif(position[i] == 'RWB'):
+                position.append('RWB')
+            elif(position[i] == 'LB'):
+                position.append('LWB')
+            elif(position[i] == 'RB'):
+                position.append('RWB')
+            elif(position[i] == 'CDM'):
+                position.append('CM')
+            elif(position[i] == 'LM'):
+                position.append('LW')
+            elif(position[i] == 'RM'):
+                position.append('RW')
+            elif(position[i] == 'LW'):
+                position.append('LM')
+            elif(position[i] == 'RW'):
+                position.append('RM')
+            elif(position[i] == 'CF'):
+                position.append('CAM')
+                name.append(name[i])
+                club.append(club[i])
+                nation.append(nation[i])
+                league.append(league[i])
+                ovr_ratings.append(ovr_ratings[i])
+                base_ratings.append(base_ratings[i])
+                versions.append(versions[i])
+                price.append(int(price[i]) + 125000)
+                position.append('ST')
+            elif(position[i] == 'ST'):
+                position.append('CF')
+            elif(position[i] == 'CAM'):
+                position.append('CM')
+                name.append(name[i])
+                club.append(club[i])
+                nation.append(nation[i])
+                league.append(league[i])
+                ovr_ratings.append(ovr_ratings[i])
+                base_ratings.append(base_ratings[i])
+                versions.append(versions[i])
+                price.append(int(price[i]) + 125000)
+                position.append('CF')
+            elif(position[i] == 'CM'):
+                position.append('CDM')
+                name.append(name[i])
+                club.append(club[i])
+                nation.append(nation[i])
+                league.append(league[i])
+                ovr_ratings.append(ovr_ratings[i])
+                base_ratings.append(base_ratings[i])
+                versions.append(versions[i])
+                price.append(int(price[i]) + 125000)
+                position.append('CAM')
+            
+            name.append(name[i])
+            club.append(club[i])
+            nation.append(nation[i])
+            league.append(league[i])
+            ovr_ratings.append(ovr_ratings[i])
+            base_ratings.append(base_ratings[i])
+            versions.append(versions[i])
+            price.append(int(price[i]) + 125000)
 
     print("Writing to csv")
-    with open('cards', 'a') as file:
+    with open('cards', mode) as file:
         csv_writer = csv.writer(file)
-        csv_writer.writerow(["name", "position", "club", "nation", "league", "ovr_ratings", "base_ratings", "price"])
+        csv_writer.writerow(["name", "position", "club", "nation", "league", "ovr_ratings", "base_ratings", "price", "versions"])
         for i in range(0, len(name)):
-            csv_writer.writerow([name[i], position[i], club[i], nation[i], league[i], ovr_ratings[i], base_ratings[i], price[i]])
+            csv_writer.writerow([name[i], position[i], club[i], nation[i], league[i], ovr_ratings[i], base_ratings[i], price[i], versions[i]])
     print("Writing to csv completed")
 
 def clean():
@@ -120,6 +192,6 @@ def clean():
 
 if __name__ == '__main__':
     print('Running Scrapper')
-    run(1, ' ')
-    clean()
+    #run(1, ' ')
+    #clean()
     #run(2, '&version=winter_wildcards')
