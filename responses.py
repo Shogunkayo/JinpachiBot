@@ -1,5 +1,6 @@
 import random
 import analysis
+import anime
 
 def clean_request(request) -> str:
     if(request[1] == ' '):
@@ -131,3 +132,6 @@ def handle_response_search(message):
             return 'Lock off'
         
         return format_response(analysis.search_league(request)) 
+
+def handle_anime_response(request) -> str:
+    return anime.search_anime(request[5:])
