@@ -117,12 +117,52 @@ class HelpView(View):
             return False
         return True
 
+class AnimeView(View):
+    def __init__(self, message):
+        super().__init__(timeout=60)
+        self.message = message
+    
+    @discord.ui.button(label='1', custom_id='first')
+    async def first_btn_callback(self, interaction, first_btn):
+        content = 'Working'
+        await interaction.response.edit_message(content=content, view=self)
+
+    @discord.ui.button(label='2', custom_id='second')
+    async def second_btn_callback(self, interaction, second_btn):
+        content = 'hehe'
+        await interaction.response.edit_message(content=content, view=self)
+
+    @discord.ui.button(label='3', custom_id='third')
+    async def third_btn_callback(self, interaction, third_btn):
+        content = 'lmao'
+        await interaction.response.edit_message(content=content, view=self)
+
+    @discord.ui.button(label='4', custom_id='fourth')
+    async def fourth_btn_callback(self, interaction, fourth_btn):
+        content = 'pffttt'
+        await interaction.response.edit_message(content=content, view=self)
+    
+    @discord.ui.button(label='5', custom_id='fifth')
+    async def fifth_btn_callback(self, interaction, fifth_btn):
+        content = 'roflmao'
+        await interaction.response.edit_message(content=content, view=self)
+
+    async def interaction_check(self, interaction) -> bool:
+        if interaction.user != self.message.author:
+            await interaction.response.send_message('You cant use that', ephemeral=True)
+            return False
+        return True
+
 def create_ui_search(message, response):
     view = SearchView(message, response)
     return view
 
 def create_ui_help(message):
     view = HelpView(message)
+    return view
+
+def create_ui_anime(message):
+    view = AnimeView(message)
     return view
 
 # Send messages
@@ -140,6 +180,12 @@ async def send_message(message, user_message, is_private, client=False):
             response = responses.handle_response_help()
             view = create_ui_help(message)
             await message.author.send(response, view=view) if is_private else await message.channel.send(response, view=view)
+        
+        elif(user_message[:5] == 'anime'):
+            response = responses.handle_anime_response(user_message)
+            view = create_ui_anime(message)
+            await message.author.send(response, view=view) if is_private else await message.channel.send(response, view=view)
+        
         else:
             response = responses.handle_response_misc(user_message, client)
             await message.author.send(response) if is_private else await message.channel.send(response)
@@ -160,6 +206,7 @@ def run_bot():
 
     @client.event
     async def on_message(message):
+
         if message.author == client.user:
             return
 
@@ -167,15 +214,18 @@ def run_bot():
         user_message = str(message.content)
         channel = str(message.channel)
 
+        if(user_message[0] + user_message[1] != 'j!'):
+            return
+    
         # Debug printing
         with open('logs', 'a') as file:
             file.write((f"{username} said: '{user_message}' in ({channel})\n"))
 
         # If the user message contains a '?' in front of the text, it becomes a private message
-        if user_message[0] == '?':
-            user_message = user_message[1:]
+        if user_message[2] == '?':
+            user_message = user_message[3:]
             await send_message(message, user_message, is_private=True)
-        elif user_message[0] + user_message[1] == 'j!':
+        else:
             user_message = user_message[2:]
             await send_message(message, user_message, is_private=False, client=client)
 
