@@ -133,5 +133,5 @@ def handle_response_search(message):
         
         return format_response(analysis.search_league(request)) 
 
-def handle_anime_response(request) -> str:
+def handle_anime_response(request):
     return anime.search_anime(request[5:])
