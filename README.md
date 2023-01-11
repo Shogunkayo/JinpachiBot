@@ -9,11 +9,11 @@ Use the [link](https://discord.com/api/oauth2/authorize?client_id=10572122119672
 ## Features
 ### Implemented
 1. Search EA FIFA Database for players
+2. Get real time information about any anime
 
 ### Planned
 1. Analyze Soccer Guru team
-2. Scrape updates and news about the anime Blue Lock
-3. Create an Ego Jinpachi Chatbot
+2. Create an Ego Jinpachi Chatbot
 
 ## Contributing
 
