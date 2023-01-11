@@ -43,7 +43,7 @@ def format_response(response):
     return response
 
 def handle_response_help():
-    return '```\nJinpachiBot - Help\nIt’s Simple Really\n\n🔍 Search -> Search for players, sorted based on total base ratings\n🏳️ Misc -> Miscellaneous commands```'
+    return '```\nJinpachiBot - Help\nIt’s Simple Really\n\n🔍 Search -> Search for players, sorted based on total base ratings\n🏳️ Misc -> Miscellaneous commands\n⸜(｡˃ ᵕ ˂ )⸝ Anime -> Search for you favourite animes, you weebs```'
 
 def handle_response_misc(message, client):
     request = message.upper()

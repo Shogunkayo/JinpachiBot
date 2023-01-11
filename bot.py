@@ -104,12 +104,17 @@ class HelpView(View):
     @discord.ui.button(label='Search', custom_id='search')
     async def search_btn_callback(self, interaction, search_btn):
         content = '```\nj!player {playername} -> search for a player\nj!p {playername} -> shorthand for player\nj!nation {nation} -> get a list of all players of the nation\nj!n {nation} -> shorthand for nation\nj!club {club} -> get a list of all players of the club\nj!c {club} -> shorthand for club\nj!league {league} -> get a list of all players of the league\nj!l {leauge} -> shorthand for league\nj!position {position} -> get a list of all players playing in the position\nj!pos {position} -> shorthand for position```'
-        await interaction.response.send_message(content=content)
+        await interaction.response.edit_message(content=content, view=self)
 
     @discord.ui.button(label='Misc', custom_id='misc')
     async def misc_btn_callback(self, interaction, misc_btn):
         content = '```\nj!hello -> greet the bot :) it can get lonely sometimes\nj!roll -> get a random number between 1 and 100\nj!ping -> get the latency```'
-        await interaction.response.send_message(content=content)
+        await interaction.response.edit_message(content=content, view=self)
+
+    @discord.ui.button(label='Anime', custom_id='anime')
+    async def anime_btn_callback(self, interaction, anime_btn):
+        content = '```\nj!anime {animename} -> search real time information about an anime (source: livechart.me)```'
+        await interaction.response.edit_message(content=content, view=self)
 
     async def interaction_check(self, interaction) -> bool:
         if interaction.user != self.message.author:
