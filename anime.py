@@ -31,9 +31,9 @@ def search_anime(name):
     try:
         anime_ids = soup.find_all('div', class_ = 'anime-item__body__title')
         if(len(anime_ids) == 0):
-            return 'I could not find that anime'
+            return [{'name':'I could not find that anime', 'code':0}]
 
-        anime_ids = anime_ids[:min(5, len(anime_ids))]
+        anime_ids = anime_ids[:min(3, len(anime_ids))]
         for i in range(len(anime_ids)):
             anime_ids[i] = anime_ids[i].find('a')['href']
 
@@ -57,17 +57,18 @@ def search_anime(name):
 
             if(status == 'Releasing'):
                 new_ep = [i.text.strip() for i in countdown_soup.find('div', class_='countdown-bar').find_all('div', class_='info-bar-cell')]
+                new_ep = f"{new_ep[0]} on {new_ep[1]}\nTime for next episode: {new_ep[2]} {new_ep[3]} {new_ep[4]}"
             else:
-                new_ep = []
+                new_ep = "NA"
 
-            anime_details.append({'name':name, 'description':description, 'genre':genre, 'studio':studio, 'original_title':original_title, 'status':status, 'premiere':premiere, 'season':season, 'episodes':episodes, 'new_ep':new_ep})
+            anime_details.append({'name':name, 'description':description, 'genre':genre, 'studio':studio, 'original_title':original_title, 'status':status, 'premiere':premiere, 'season':season, 'episodes':episodes, 'new_ep':new_ep, 'code':1})
 
         return anime_details
     except Exception as e:
         print(e)
-        return 'There was a problem processing your request'
+        return [{'name': 'There was a problem processing your request', 'code':0}]
 
 if __name__ == '__main__':
     start_time = time.time()
-    print(search_anime('naruto'))  
+    print(search_anime('bluelock'))  
     print("--- %s seconds ---" % (time.time() - start_time))

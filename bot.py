@@ -118,33 +118,36 @@ class HelpView(View):
         return True
 
 class AnimeView(View):
-    def __init__(self, message):
+    def __init__(self, message, response):
         super().__init__(timeout=60)
         self.message = message
-    
+        self.response = response
+  
+
+  
     @discord.ui.button(label='1', custom_id='first')
     async def first_btn_callback(self, interaction, first_btn):
-        content = 'Working'
+        content = '```\n' + f"Name: {self.response[0]['name']}\n\nDescription:\n{self.response[0]['description']}\n\nGenre:{self.response[0]['genre']}\nStudio:{self.response[0]['studio']}\nOriginal Title:{self.response[0]['original_title']}\nStatus:{self.response[0]['status']}\nPremiere:{self.response[0]['premiere']}\nSeason:{self.response[0]['season']}\nTotal Episodes:{self.response[0]['episodes']}\nNext Episode:{self.response[0]['new_ep']}" + '\n```'
         await interaction.response.edit_message(content=content, view=self)
 
+    
     @discord.ui.button(label='2', custom_id='second')
     async def second_btn_callback(self, interaction, second_btn):
-        content = 'hehe'
-        await interaction.response.edit_message(content=content, view=self)
-
-    @discord.ui.button(label='3', custom_id='third')
-    async def third_btn_callback(self, interaction, third_btn):
-        content = 'lmao'
-        await interaction.response.edit_message(content=content, view=self)
-
-    @discord.ui.button(label='4', custom_id='fourth')
-    async def fourth_btn_callback(self, interaction, fourth_btn):
-        content = 'pffttt'
+        if(len(self.response) > 1):
+            content = '```\n' + f"Name: {self.response[1]['name']}\n\nDescription:\n{self.response[1]['description']}\n\nGenre:{self.response[1]['genre']}\nStudio:{self.response[1]['studio']}\nOriginal Title:{self.response[1]['original_title']}\nStatus:{self.response[1]['status']}\nPremiere:{self.response[1]['premiere']}\nSeason:{self.response[1]['season']}\nTotal Episodes:{self.response[1]['episodes']}\nNext Episode:{self.response[1]['new_ep']}" + '\n```'
+        else:
+            second_btn.disabled = True
+            content = "Teehee"
         await interaction.response.edit_message(content=content, view=self)
     
-    @discord.ui.button(label='5', custom_id='fifth')
-    async def fifth_btn_callback(self, interaction, fifth_btn):
-        content = 'roflmao'
+    
+    @discord.ui.button(label='3', custom_id='third')
+    async def third_btn_callback(self, interaction, third_btn):
+        if(len(self.response) > 2):
+            content = '```\n' + f"Name: {self.response[2]['name']}\n\nDescription:\n{self.response[2]['description']}\n\nGenre:{self.response[2]['genre']}\nStudio:{self.response[2]['studio']}\nOriginal Title:{self.response[2]['original_title']}\nStatus:{self.response[2]['status']}\nPremiere:{self.response[2]['premiere']}\nSeason:{self.response[2]['season']}\nTotal Episodes:{self.response[2]['episodes']}\nNext Episode:{self.response[2]['new_ep']}" + '\n```'
+        else:
+            third_btn.disabled = True
+            content = "Teehee"
         await interaction.response.edit_message(content=content, view=self)
 
     async def interaction_check(self, interaction) -> bool:
@@ -161,8 +164,8 @@ def create_ui_help(message):
     view = HelpView(message)
     return view
 
-def create_ui_anime(message):
-    view = AnimeView(message)
+def create_ui_anime(message, response):
+    view = AnimeView(message, response)
     return view
 
 # Send messages
@@ -183,8 +186,13 @@ async def send_message(message, user_message, is_private, client=False):
         
         elif(user_message[:5] == 'anime'):
             response = responses.handle_anime_response(user_message)
-            view = create_ui_anime(message)
-            await message.author.send(response, view=view) if is_private else await message.channel.send(response, view=view)
+            view = create_ui_anime(message, response)
+            if(response[0]['code'] == 0):
+                output = response[0]['name']
+                view = None
+            else:
+                output = f"```\nTop {len(response)} results:\n" + "\n".join([str(i+1)+ '. ' + response[i]['name'] for i in range(len(response))])  + "\n```"
+            await message.author.send(output, view=view) if is_private else await message.channel.send(output, view=view)
         
         else:
             response = responses.handle_response_misc(user_message, client)
