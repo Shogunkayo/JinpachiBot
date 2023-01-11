@@ -127,9 +127,7 @@ class AnimeView(View):
         super().__init__(timeout=60)
         self.message = message
         self.response = response
-  
-
-  
+    
     @discord.ui.button(label='1', custom_id='first')
     async def first_btn_callback(self, interaction, first_btn):
         content = '```\n' + f"Name: {self.response[0]['name']}\n\nDescription:\n{self.response[0]['description']}\n\nGenre:{self.response[0]['genre']}\nStudio:{self.response[0]['studio']}\nOriginal Title:{self.response[0]['original_title']}\nStatus:{self.response[0]['status']}\nPremiere:{self.response[0]['premiere']}\nSeason:{self.response[0]['season']}\nTotal Episodes:{self.response[0]['episodes']}\nNext Episode:{self.response[0]['new_ep']}" + '\n```'
